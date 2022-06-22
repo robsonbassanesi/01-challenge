@@ -13,12 +13,8 @@ export function Task(props) {
     <>
       <section>
         <div className={styles.taskList}>
-          <input
-            checked={props.onIsCompleted}
-            type="checkbox"
-            onClick={handleCompleteTask}
-          />
-          <p className={props.onIsCompleted ? 'completed' : ''}>
+          <input type="checkbox" onClick={handleCompleteTask} />
+          <p className={props.onIsComplete ? styles.completed : ''}>
             {props.content}
           </p>
           <button onClick={handleDeleteTask} type="button" />

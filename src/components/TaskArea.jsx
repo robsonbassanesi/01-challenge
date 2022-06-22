@@ -9,17 +9,6 @@ import { Transition } from './Transition';
 export function TaskArea() {
   const [tasks, setTasks] = useState([]);
   const [newTaskText, setNewTaskText] = useState('');
-  const [countTask, setCountTask] = useState(0);
-  const [countTaskDone, setCountTaskDone] = useState(0);
-
-  console.log(countTaskDone);
-
-  const IncrementTaskByCreate = () => {
-    setCountTask(countTask + 1);
-  };
-  const DecreaseTaskByRemove = () => {
-    setCountTask(countTask - 1);
-  };
 
   function handleCreateNewTask() {
     event.preventDefault();
@@ -33,8 +22,9 @@ export function TaskArea() {
     setTasks([...tasks, newTask]);
 
     setNewTaskText('');
-    IncrementTaskByCreate();
   }
+
+  const countTaskDone = tasks.filter(task => task.isComplete === true).length;
 
   function handleNewTaskChange() {
     setNewTaskText(event.target.value);
@@ -45,14 +35,7 @@ export function TaskArea() {
       return task.id !== id;
     });
 
-    for (let i in tasks) {
-      if (tasks[i].id === id && tasks[i].isComplete === true) {
-        setCountTaskDone(countTaskDone - 1);
-      }
-    }
-
     setTasks(taskWithoutDeletedOne);
-    DecreaseTaskByRemove();
   }
 
   function isCompleteTask(id) {
@@ -64,20 +47,6 @@ export function TaskArea() {
           }
         : task
     );
-
-    for (let i in tasksCompleted) {
-      if (
-        tasksCompleted[i].id === id &&
-        tasksCompleted[i].isComplete === true
-      ) {
-        setCountTaskDone(countTaskDone + 1);
-      } else if (
-        tasksCompleted[i].id === id &&
-        tasksCompleted[i].isComplete === false
-      ) {
-        setCountTaskDone(countTaskDone - 1);
-      }
-    }
 
     setTasks(tasksCompleted);
   }
@@ -105,12 +74,12 @@ export function TaskArea() {
           <div className={styles.taskCounter}>
             <div className={styles.createdTaskCounter}>
               <h1>Tarefas criadas</h1>
-              <span>{countTask}</span>
+              <span>{tasks.length}</span>
             </div>
             <div className={styles.finishedTaskCounter}>
               <h1>Concluídas</h1>
               <span>
-                {countTaskDone} de {countTask}
+                {countTaskDone} de {tasks.length}
               </span>
             </div>
           </div>
@@ -120,11 +89,12 @@ export function TaskArea() {
             {tasks.map(task => {
               return (
                 <Task
+                  key={task.id}
                   onDeleteTask={deleteTask}
                   content={task.title}
                   id={task.id}
                   onIsCompleteTask={isCompleteTask}
-                  onIsCompleted={task.isComplete}
+                  onIsComplete={task.isComplete}
                 />
               );
             })}
