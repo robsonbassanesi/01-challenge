@@ -1,15 +1,25 @@
 import '../global.scss';
 import styles from './TaskArea.module.scss';
-import clipboard from '../assets/clipboard.svg';
 import { Task } from './Task';
 import { PlusCircle } from 'phosphor-react';
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
+import { Transition } from './Transition';
 
 export function TaskArea() {
   const [tasks, setTasks] = useState([]);
-
   const [newTaskText, setNewTaskText] = useState('');
+  const [countTask, setCountTask] = useState(0);
+  const [countTaskDone, setCountTaskDone] = useState(0);
+
+  console.log(countTaskDone);
+
+  const IncrementTaskByCreate = () => {
+    setCountTask(countTask + 1);
+  };
+  const DecreaseTaskByRemove = () => {
+    setCountTask(countTask - 1);
+  };
 
   function handleCreateNewTask() {
     event.preventDefault();
@@ -23,6 +33,7 @@ export function TaskArea() {
     setTasks([...tasks, newTask]);
 
     setNewTaskText('');
+    IncrementTaskByCreate();
   }
 
   function handleNewTaskChange() {
@@ -33,7 +44,42 @@ export function TaskArea() {
     const taskWithoutDeletedOne = tasks.filter(task => {
       return task.id !== id;
     });
+
+    for (let i in tasks) {
+      if (tasks[i].id === id && tasks[i].isComplete === true) {
+        setCountTaskDone(countTaskDone - 1);
+      }
+    }
+
     setTasks(taskWithoutDeletedOne);
+    DecreaseTaskByRemove();
+  }
+
+  function isCompleteTask(id) {
+    const tasksCompleted = tasks.map(task =>
+      task.id == id
+        ? {
+            ...task,
+            isComplete: !task.isComplete
+          }
+        : task
+    );
+
+    for (let i in tasksCompleted) {
+      if (
+        tasksCompleted[i].id === id &&
+        tasksCompleted[i].isComplete === true
+      ) {
+        setCountTaskDone(countTaskDone + 1);
+      } else if (
+        tasksCompleted[i].id === id &&
+        tasksCompleted[i].isComplete === false
+      ) {
+        setCountTaskDone(countTaskDone - 1);
+      }
+    }
+
+    setTasks(tasksCompleted);
   }
 
   return (
@@ -55,36 +101,37 @@ export function TaskArea() {
         </form>
       </div>
       <main>
-        <div className={styles.tasksArea}>
+        <div className={styles.counterTasks}>
           <div className={styles.taskCounter}>
             <div className={styles.createdTaskCounter}>
               <h1>Tarefas criadas</h1>
-              <h2>0</h2>
+              <span>{countTask}</span>
             </div>
             <div className={styles.finishedTaskCounter}>
               <h1>Concluídas</h1>
-              <h2>0</h2>
+              <span>
+                {countTaskDone} de {countTask}
+              </span>
             </div>
           </div>
-          <div className={styles.taskList}>
-            <img src={clipboard} alt="icone de prancheta" />
-            <p>
-              <h1>Você ainda não tem tarefas cadastradas</h1>
-              <h1>Crie tarefas e organize seus itens a fazer</h1>
-            </p>
+        </div>
+        {tasks.length > 0 ? (
+          <div>
+            {tasks.map(task => {
+              return (
+                <Task
+                  onDeleteTask={deleteTask}
+                  content={task.title}
+                  id={task.id}
+                  onIsCompleteTask={isCompleteTask}
+                  onIsCompleted={task.isComplete}
+                />
+              );
+            })}
           </div>
-        </div>
-        <div>
-          {tasks.map(task => {
-            return (
-              <Task
-                onDeleteTask={deleteTask}
-                content={task.title}
-                id={task.id}
-              />
-            );
-          })}
-        </div>
+        ) : (
+          <Transition />
+        )}
       </main>
     </>
   );

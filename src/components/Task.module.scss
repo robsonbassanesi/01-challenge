@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding-inline: 1.6rem;
-  top: 15rem;
+  top: 2.4rem;
   margin: auto;
 
   width: 73.6rem;
@@ -37,6 +37,11 @@
     background: url('../assets/deletebuttonhover.svg') no-repeat center;
     background-color: var(--gray-400);
   }
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 
 section + section {

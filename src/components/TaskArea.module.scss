@@ -81,11 +81,10 @@
     gap: 1.6rem;
   }
 
-  h2 {
+  span {
     margin-top: 0.5rem;
     font-size: 1.2rem;
     padding: 0.2rem 0.8rem;
-    width: 2.5rem;
     height: 1.9rem;
     background: var(--gray-400);
     border-radius: 99.9rem;
@@ -99,49 +98,17 @@
 
 .finishedTaskCounter {
   color: var(--purple);
+  span {
+    gap: 2rem;
+  }
 }
 
-.tasksArea {
-  position: absolute;
+.counterTasks {
   display: flex;
   flex-direction: column;
   margin: auto;
   padding: 0;
   gap: 2.4rem;
   width: 73.6rem;
-  height: 28.7rem;
-  left: calc(50% - 736px / 2);
   margin-top: 6.4rem;
-}
-
-.taskList {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 0.1rem solid var(--gray-400);
-  border-radius: 0.8rem;
-
-  img {
-    margin-top: 6.4rem;
-    margin-bottom: 1.6rem;
-    width: 5.6rem;
-    height: 5.6rem;
-    visibility: hidden;
-  }
-
-  h1:first-child {
-    font-weight: 700;
-    font-size: 1.6rem;
-    margin-top: 0.5rem;
-    color: var(--gray-300);
-    visibility: hidden;
-  }
-
-  h1 {
-    font-weight: 300;
-    font-size: 1.6rem;
-    margin-top: 0.5rem;
-    color: var(--gray-300);
-    visibility: hidden;
-  }
 }
