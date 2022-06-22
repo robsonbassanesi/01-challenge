@@ -13,7 +13,11 @@ export function Task(props) {
     <>
       <section>
         <div className={styles.taskList}>
-          <input type="checkbox" onClick={handleCompleteTask} />
+          <input
+            checked={props.onIsCompleted}
+            type="checkbox"
+            onClick={handleCompleteTask}
+          />
           <p className={props.onIsCompleted ? 'completed' : ''}>
             {props.content}
           </p>
