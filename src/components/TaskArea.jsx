@@ -9,12 +9,31 @@ import { useState } from 'react';
 export function TaskArea() {
   const [tasks, setTasks] = useState([]);
 
+  const [newTaskText, setNewTaskText] = useState('');
+
   function handleCreateNewTask() {
     event.preventDefault();
 
-    const newTask = event.target.handleTask.value;
+    const newTask = {
+      id: uuidv4(),
+      title: newTaskText,
+      isComplete: false
+    };
 
-    setTasks(...tasks, newTask);
+    setTasks([...tasks, newTask]);
+
+    setNewTaskText('');
+  }
+
+  function handleNewTaskChange() {
+    setNewTaskText(event.target.value);
+  }
+
+  function deleteTask(id) {
+    const taskWithoutDeletedOne = tasks.filter(task => {
+      return task.id !== id;
+    });
+    setTasks(taskWithoutDeletedOne);
   }
 
   return (
@@ -25,6 +44,9 @@ export function TaskArea() {
             name="handleTask"
             type="text"
             placeholder="Adicione uma nova tarefa"
+            onChange={handleNewTaskChange}
+            value={newTaskText}
+            required
           />
           <button type="submit">
             Criar
@@ -54,7 +76,13 @@ export function TaskArea() {
         </div>
         <div>
           {tasks.map(task => {
-            return <Task content={task} />;
+            return (
+              <Task
+                onDeleteTask={deleteTask}
+                content={task.title}
+                id={task.id}
+              />
+            );
           })}
         </div>
       </main>
